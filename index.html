@@ -470,14 +470,20 @@ function parseReps(rows) {
 
   if (headerIdx === -1) throw new Error('BDR header row not found in CSV');
 
-  // 2. Read rep rows until first empty name (end of BDR block)
+  // 2. Read rep rows — skip blank rows before first data row,
+  //    stop at the first blank row after data has begun (ends BDR block).
   const reps = [];
+  let seenData = false;
   for (let i = headerIdx + 1; i < rows.length; i++) {
     const r = rows[i];
     if (!r || r.length <= nc) continue;
 
     const name = (r[nc] ?? '').trim();
-    if (!name) break; // end of block (blank row before AE section)
+    if (!name) {
+      if (seenData) break; // blank row after data = end of BDR block
+      continue;            // blank row before first data row = skip
+    }
+    seenData = true;
 
     const points = parseFloat(r[pc] ?? '') || 0;
     if (HIDE_ZERO_POINT && points === 0) continue;
