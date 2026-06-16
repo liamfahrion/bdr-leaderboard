@@ -11,32 +11,28 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #080e09;
-      --surface:     #0c1a0e;
-      --surface-hi:  #101f12;
-      --border:      #182b1b;
-      --border-hi:   #1e3522;
-      --green:       #00e676;
-      --green-mid:   #00b058;
-      --green-dark:  #006836;
-      --green-glow:  rgba(0, 230, 118, 0.28);
-      --silver:      #8aa4ae;
-      --bronze:      #b07d4a;
-      --text:        #e2efe5;
-      --text-2:      #6e8f75;
-      --text-3:      #384d3c;
-      --font:        'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --bg:         #f0f2f5;
+      --card:       #ffffff;
+      --border:     rgba(0, 0, 0, 0.07);
+      --red:        #e53935;
+      --red-light:  #fdecea;
+      --red-mid:    #ef5350;
+      --green:      #22c55e;
+      --green-dim:  #16a34a;
+      --amber:      #f59e0b;
+      --text:       #111827;
+      --text-2:     #374151;
+      --text-3:     #6b7280;
+      --text-4:     #9ca3af;
+      --shadow-sm:  0 1px 2px rgba(0,0,0,0.08);
+      --shadow:     0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
+      --font:       'Space Grotesk', system-ui, -apple-system, sans-serif;
     }
 
-    html, body {
-      width: 100%; height: 100%; overflow: hidden;
-    }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
 
     body {
-      background-color: var(--bg);
-      background-image:
-        radial-gradient(ellipse 70% 90% at 12% 55%, rgba(0, 55, 18, 0.14) 0%, transparent 100%),
-        radial-gradient(ellipse 50% 60% at 88% 25%, rgba(0, 35, 12, 0.09) 0%, transparent 100%);
+      background: var(--bg);
       color: var(--text);
       font-family: var(--font);
       -webkit-font-smoothing: antialiased;
@@ -45,67 +41,68 @@
       height: 100vh;
     }
 
-    /* ─── HEADER ─────────────────────────────────────────── */
+    /* ── HEADER ──────────────────────────────────────────── */
     header {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow);
       display: flex;
       align-items: center;
-      padding: 0 2.5rem;
-      height: 4.75rem;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 4.5rem;
       flex-shrink: 0;
-      border-bottom: 1px solid var(--border-hi);
-      background: linear-gradient(180deg, rgba(11, 22, 13, 0.98) 0%, rgba(8, 14, 9, 0) 100%);
-      position: relative;
-      z-index: 20;
+      z-index: 10;
     }
 
     .hdr-left {
-      flex: 1;
       display: flex;
-      flex-direction: column;
-      gap: 0.12rem;
+      align-items: baseline;
+      gap: 0.9rem;
     }
 
     .hdr-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text);
-    }
-
-    #hdr-period {
-      font-size: 0.65rem;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--green);
-    }
-
-    .hdr-brand {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 800;
-      letter-spacing: -0.03em;
-      background: linear-gradient(130deg, #f0f4f1 30%, rgba(0, 230, 118, 0.75) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      user-select: none;
+      color: var(--red);
+      letter-spacing: -0.02em;
+    }
+
+    .hdr-sep {
+      width: 1px;
+      height: 1.1rem;
+      background: var(--border);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .hdr-period {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-3);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hdr-dayinfo {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-4);
     }
 
     .hdr-right {
-      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
-      gap: 0.18rem;
+      gap: 0.1rem;
     }
 
     #clock {
-      font-size: 1.45rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      font-variant-numeric: tabular-nums;
+      font-size: 1.5rem;
+      font-weight: 700;
       color: var(--text);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
     }
 
     #status {
@@ -113,161 +110,206 @@
       font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      transition: color 0.4s;
     }
-    #status.fresh   { color: var(--green-mid); }
-    #status.stale   { color: #f59e0b; }
-    #status.loading { color: var(--text-3); }
+    #status.fresh   { color: var(--green-dim); }
+    #status.stale   { color: #d97706; }
+    #status.loading { color: var(--text-4); }
 
-    /* ─── MAIN ───────────────────────────────────────────── */
+    /* ── MAIN ────────────────────────────────────────────── */
     main {
       flex: 1;
       min-height: 0;
       display: flex;
       flex-direction: column;
-      padding: 1.1rem 2rem 0.9rem;
+      padding: 1rem 1.75rem 0.85rem;
       gap: 0.85rem;
       overflow: hidden;
     }
 
-    /* ─── LOADING / ERROR ────────────────────────────────── */
+    /* ── LOADING ─────────────────────────────────────────── */
     #loading-msg {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.9rem;
-      font-weight: 500;
+      font-size: 0.85rem;
+      font-weight: 600;
       letter-spacing: 0.12em;
-      color: var(--text-3);
       text-transform: uppercase;
+      color: var(--text-4);
     }
 
-    /* ─── PODIUM ─────────────────────────────────────────── */
-    #podium {
+    /* ── STATS STRIP ─────────────────────────────────────── */
+    #stats-strip {
       display: none;
-      justify-content: center;
-      align-items: flex-end;
-      gap: 1.25rem;
+      gap: 0.85rem;
       flex-shrink: 0;
     }
 
-    .p-slot {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .s-panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 0.9rem 1.2rem;
     }
 
-    .p-rank-label {
+    .s-label {
       font-size: 0.58rem;
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      margin-bottom: 0.35rem;
+      color: var(--text-4);
+      margin-bottom: 0.45rem;
     }
-    .p-rank-label.r1 { color: var(--green); }
-    .p-rank-label.r2 { color: var(--silver); }
-    .p-rank-label.r3 { color: var(--bronze); }
 
-    /* ─── PODIUM CARDS ───────────────────────────────────── */
-    .p-card {
+    /* Team goal panel */
+    #sp-team {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      border-radius: 20px;
-      border: 1px solid var(--border-hi);
-      background: var(--surface);
-      position: relative;
+      gap: 0;
     }
 
-    .p-card.r1 {
-      width: 222px;
-      padding: 2rem 1.75rem 1.4rem;
-      border-color: var(--green);
-      background: linear-gradient(155deg, #0b1f0e 0%, #08120a 100%);
-      animation: glow-pulse 3.5s ease-in-out infinite;
+    .sp-number-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
     }
 
-    .p-card.r2 {
-      width: 178px;
-      padding: 1.5rem 1.3rem 1.2rem;
-      border-color: var(--silver);
-    }
-
-    .p-card.r3 {
-      width: 178px;
-      padding: 1.5rem 1.3rem 1.2rem;
-      border-color: var(--bronze);
-    }
-
-    @keyframes glow-pulse {
-      0%, 100% {
-        box-shadow:
-          0 0 28px var(--green-glow),
-          0 0 64px rgba(0, 230, 118, 0.1),
-          inset 0 1px 0 rgba(0, 230, 118, 0.14);
-      }
-      50% {
-        box-shadow:
-          0 0 50px rgba(0, 230, 118, 0.45),
-          0 0 100px rgba(0, 230, 118, 0.18),
-          inset 0 1px 0 rgba(0, 230, 118, 0.24);
-      }
-    }
-
-    .crown {
-      position: absolute;
-      top: -1.45rem;
-      font-size: 1.75rem;
-      filter: drop-shadow(0 2px 10px rgba(255, 215, 0, 0.72));
-      animation: crown-float 4s ease-in-out infinite;
+    .sp-current {
+      font-size: 2.6rem;
+      font-weight: 800;
+      color: var(--red);
       line-height: 1;
-      user-select: none;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
     }
 
-    @keyframes crown-float {
-      0%, 100% { transform: translateY(0) rotate(-4deg); }
-      50%       { transform: translateY(-4px) rotate(4deg); }
+    .sp-of-goal {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-3);
     }
 
-    /* ─── GRID ───────────────────────────────────────────── */
+    .sp-bar-track {
+      height: 7px;
+      background: var(--red-light);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: 0.55rem;
+    }
+
+    .sp-bar-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 9999px;
+      min-width: 4px;
+      transition: width 0.8s ease;
+    }
+
+    .sp-meta-row {
+      display: flex;
+      gap: 1.75rem;
+    }
+
+    .sp-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.05rem;
+    }
+
+    .sp-meta-lbl {
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-4);
+    }
+
+    .sp-meta-val {
+      font-size: 1.05rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+    }
+    .sp-meta-val.red   { color: var(--red); }
+    .sp-meta-val.green { color: var(--green-dim); }
+
+    /* Motivation panel */
+    #sp-quote {
+      width: 290px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #quote-body {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-2);
+      line-height: 1.55;
+      font-style: italic;
+      margin-bottom: 0.4rem;
+    }
+
+    #quote-attr {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--text-4);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── CARD GRID ───────────────────────────────────────── */
     #grid {
       display: none;
-      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-      gap: 0.65rem;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 0.75rem;
       flex: 1;
       min-height: 0;
       align-content: start;
     }
 
-    .g-card {
-      background: var(--surface);
+    /* ── CARD ────────────────────────────────────────────── */
+    .card {
+      background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 0.9rem 0.9rem 0.8rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      padding: 0.85rem 0.65rem 0.7rem;
-      gap: 0.4rem;
-      position: relative;
+      gap: 0.3rem;
     }
 
-    .g-rank {
-      position: absolute;
-      top: 0.4rem;
-      left: 0.55rem;
-      font-size: 0.52rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
+    /* top row: avatar left, rank badge right */
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 0.2rem;
+    }
+
+    .rank-badge {
+      font-size: 0.65rem;
+      font-weight: 800;
       color: var(--text-3);
+      background: var(--bg);
+      border-radius: 6px;
+      padding: 0.18rem 0.45rem;
+      letter-spacing: 0.04em;
     }
+    .rank-badge.top { background: #fef3c7; color: #92400e; }
 
-    /* ─── SHARED CARD ELEMENTS ───────────────────────────── */
+    /* avatar */
     .c-photo {
       display: block;
       border-radius: 50%;
       object-fit: cover;
-      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
     }
 
     .c-initials {
@@ -276,74 +318,102 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      letter-spacing: 0.03em;
-      color: var(--text);
       text-transform: uppercase;
-      background: linear-gradient(140deg, var(--green-dark) 0%, #003d1e 100%);
+      color: #fff;
+      background: linear-gradient(135deg, var(--red), #b71c1c);
+      box-shadow: var(--shadow-sm);
       flex-shrink: 0;
     }
 
+    /* name */
     .c-name {
-      font-weight: 600;
-      letter-spacing: 0.025em;
+      font-size: clamp(0.85rem, 1vw, 1rem);
+      font-weight: 700;
       color: var(--text);
-      text-align: center;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 100%;
     }
 
-    .c-points {
+    /* points: big number + "of X pts" */
+    .c-metric {
+      display: flex;
+      align-items: baseline;
+      gap: 0.3rem;
+      margin-top: 0.1rem;
+    }
+
+    .c-pts {
+      font-size: clamp(1.8rem, 2.5vw, 2.8rem);
       font-weight: 800;
-      color: var(--green);
+      color: var(--text);
       line-height: 1;
-      letter-spacing: -0.03em;
       font-variant-numeric: tabular-nums;
+      letter-spacing: -0.03em;
     }
 
-    .c-progress-wrap {
-      width: 88%;
-      background: rgba(255, 255, 255, 0.055);
-      border-radius: 9999px;
-      overflow: hidden;
-    }
-
-    .c-progress-fill {
-      height: 100%;
-      border-radius: 9999px;
-      background: linear-gradient(90deg, var(--green-dark) 0%, var(--green) 100%);
-      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-      min-width: 3px;
-    }
-
-    .c-stats {
-      display: flex;
-      gap: 0.9rem;
-      justify-content: center;
-    }
-
-    .c-stat {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.06rem;
-    }
-
-    .c-stat-lbl {
-      font-size: 0.5rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.11em;
+    .c-pts-goal {
+      font-size: 0.78rem;
+      font-weight: 500;
       color: var(--text-3);
     }
 
-    .c-stat-val {
-      font-size: 0.68rem;
+    /* progress bar */
+    .c-bar-track {
+      height: 5px;
+      background: var(--red-light);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0.15rem 0;
+    }
+
+    .c-bar-fill {
+      height: 100%;
+      background: var(--red);
+      border-radius: 9999px;
+      min-width: 3px;
+      transition: width 0.8s ease;
+    }
+
+    /* pct + badge row */
+    .c-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.05rem;
+    }
+
+    .c-pct {
+      font-size: clamp(1.2rem, 1.6vw, 1.8rem);
+      font-weight: 800;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .c-badge {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 9999px;
+      padding: 0.25rem 0.6rem;
+      color: #fff;
+      white-space: nowrap;
+    }
+    .c-badge.on-pace  { background: var(--green); }
+    .c-badge.tracking { background: var(--amber); }
+    .c-badge.behind   { background: var(--red-mid); }
+
+    /* pace delta */
+    .c-delta {
+      font-size: 0.63rem;
       font-weight: 600;
-      color: var(--text-2);
+      text-align: right;
       font-variant-numeric: tabular-nums;
     }
+    .c-delta.pos { color: var(--green-dim); }
+    .c-delta.neg { color: var(--red-mid); }
   </style>
 </head>
 <body>
@@ -351,9 +421,11 @@
 <header>
   <div class="hdr-left">
     <span class="hdr-title">BDR Leaderboard</span>
-    <span id="hdr-period"></span>
+    <div class="hdr-sep"></div>
+    <span class="hdr-period" id="hdr-period"></span>
+    <div class="hdr-sep"></div>
+    <span class="hdr-dayinfo" id="hdr-dayinfo"></span>
   </div>
-  <div class="hdr-brand">Pump</div>
   <div class="hdr-right">
     <div id="clock"></div>
     <div id="status" class="loading">Loading…</div>
@@ -362,13 +434,49 @@
 
 <main>
   <div id="loading-msg">Fetching leaderboard data…</div>
-  <div id="podium"></div>
-  <div id="grid"></div>
+
+  <div id="stats-strip" style="display:none">
+    <div class="s-panel" id="sp-team">
+      <div class="s-label" id="sp-team-label">Monthly BDR Team Goal</div>
+      <div class="sp-number-row">
+        <span class="sp-current" id="sp-current">—</span>
+        <span class="sp-of-goal" id="sp-of-goal">of — pts</span>
+      </div>
+      <div class="sp-bar-track">
+        <div class="sp-bar-fill" id="sp-bar" style="width:0%"></div>
+      </div>
+      <div class="sp-meta-row">
+        <div class="sp-meta">
+          <span class="sp-meta-lbl">Attainment</span>
+          <span class="sp-meta-val red" id="sp-att">—</span>
+        </div>
+        <div class="sp-meta">
+          <span class="sp-meta-lbl">Gap vs Pace</span>
+          <span class="sp-meta-val" id="sp-gap">—</span>
+        </div>
+        <div class="sp-meta">
+          <span class="sp-meta-lbl">On Pace</span>
+          <span class="sp-meta-val" id="sp-onpace">—</span>
+        </div>
+        <div class="sp-meta">
+          <span class="sp-meta-lbl">Through Month</span>
+          <span class="sp-meta-val" id="sp-through">—</span>
+        </div>
+      </div>
+    </div>
+    <div class="s-panel" id="sp-quote">
+      <div class="s-label">Daily Motivation</div>
+      <div id="quote-body"></div>
+      <div id="quote-attr"></div>
+    </div>
+  </div>
+
+  <div id="grid" style="display:none"></div>
 </main>
 
 <script>
 // ══════════════════════════════════════════════════════════════════
-//  CONFIG — edit these to reconfigure
+//  CONFIG
 // ══════════════════════════════════════════════════════════════════
 const TITLE_LABEL     = "Q2 2026";
 const REFRESH_MS      = 5 * 60 * 1000;
@@ -387,22 +495,58 @@ const PHOTOS = {
   "Wyatt":   "photos/wyatt.jpg",
 };
 
+const QUOTES = [
+  { text: "It ain't about how hard you hit. It's about how hard you can get hit and keep moving forward.", author: "Rocky Balboa" },
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "I never dreamed about success. I worked for it.", author: "Estée Lauder" },
+  { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+  { text: "The harder I work, the luckier I get.", author: "Samuel Goldwyn" },
+  { text: "Every strike brings me closer to the next home run.", author: "Babe Ruth" },
+  { text: "Your attitude, not your aptitude, will determine your altitude.", author: "Zig Ziglar" },
+  { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+  { text: "The difference between ordinary and extraordinary is that little extra.", author: "Jimmy Johnson" },
+  { text: "Hustle in silence and let your success make the noise.", author: "Unknown" },
+  { text: "Sales are contingent upon the attitude of the salesman, not the attitude of the prospect.", author: "W. Clement Stone" },
+  { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+];
+
 // ══════════════════════════════════════════════════════════════════
-//  INTERNAL STATE
+//  STATE
 // ══════════════════════════════════════════════════════════════════
-// Normalize photo keys once at startup for case-insensitive lookup
 const PHOTO_MAP = Object.fromEntries(
   Object.entries(PHOTOS).map(([k, v]) => [k.toLowerCase().trim(), v])
 );
+let lastData = null;
+let prevPts  = {};
 
-let lastData = null;  // last successfully parsed rep array
-let prevPts  = {};    // { name -> points } from the previous render, for diff animation
+// ══════════════════════════════════════════════════════════════════
+//  STATIC INIT (runs once on load)
+// ══════════════════════════════════════════════════════════════════
+document.getElementById('hdr-period').textContent = TITLE_LABEL;
+
+// Day-through-month info
+(function() {
+  const now   = new Date();
+  const dim   = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const day   = now.getDate();
+  const pct   = Math.round((day / dim) * 100);
+  document.getElementById('hdr-dayinfo').textContent = `Day ${day} of ${dim} · ${pct}% through month`;
+  document.getElementById('sp-through').textContent  = pct + '%';
+  document.getElementById('sp-team-label').textContent =
+    `Monthly BDR Team Goal — ${TITLE_LABEL}`;
+})();
+
+// Daily quote (rotates by day-of-year so it changes each morning)
+(function() {
+  const dy = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 86400000);
+  const q  = QUOTES[dy % QUOTES.length];
+  document.getElementById('quote-body').textContent = '“' + q.text + '”';
+  document.getElementById('quote-attr').textContent = '— ' + q.author;
+})();
 
 // ══════════════════════════════════════════════════════════════════
 //  CLOCK
 // ══════════════════════════════════════════════════════════════════
-document.getElementById('hdr-period').textContent = TITLE_LABEL;
-
 function tickClock() {
   document.getElementById('clock').textContent =
     new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' });
@@ -411,21 +555,18 @@ tickClock();
 setInterval(tickClock, 1000);
 
 // ══════════════════════════════════════════════════════════════════
-//  CSV PARSER  — proper RFC-4180, handles "quoted, fields"
+//  CSV PARSER  — handles quoted fields containing commas
 // ══════════════════════════════════════════════════════════════════
 function parseCSV(text) {
   const rows = [];
   let row = [], field = '', inQ = false;
-
   for (let i = 0; i < text.length; i++) {
     const c = text[i];
     if (inQ) {
       if (c === '"') {
-        if (text[i + 1] === '"') { field += '"'; i++; } // escaped quote
+        if (text[i + 1] === '"') { field += '"'; i++; }
         else inQ = false;
-      } else {
-        field += c;
-      }
+      } else { field += c; }
     } else {
       if      (c === '"')  { inQ = true; }
       else if (c === ',')  { row.push(field); field = ''; }
@@ -433,51 +574,37 @@ function parseCSV(text) {
       else if (c !== '\r') { field += c; }
     }
   }
-  // flush last field/row
   if (row.length || field !== '') { row.push(field); rows.push(row); }
   return rows;
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  DATA PARSER  — header-driven, locates BDR block by content
+//  DATA PARSER  — header-driven BDR block extraction
 // ══════════════════════════════════════════════════════════════════
 function parseReps(rows) {
-  let headerIdx = -1, nc = -1, pc = -1, gc = -1, pipc = -1;
+  let hi = -1, nc = -1, pc = -1, gc = -1, pipc = -1;
 
-  // 1. Find the header row that has a cell exactly "BDR"
   for (let i = 0; i < rows.length; i++) {
     const r = rows[i];
     const bi = r.findIndex(c => c.trim() === 'BDR');
     if (bi === -1) continue;
-
-    headerIdx = i;
-    nc = bi; // name column
-
-    // "Qualified" = points
+    hi = i; nc = bi;
     const qi = r.findIndex(c => c.trim() === 'Qualified');
     pc = qi !== -1 ? qi : bi + 1;
-
-    // "Goal" column (or unlabelled column right after points)
     const gi = r.findIndex(c => c.trim() === 'Goal');
     gc = gi !== -1 ? gi : pc + 1;
-
-    // First "Pipeline" after pointsCol
     for (let j = pc + 1; j < r.length; j++) {
       if (r[j].trim() === 'Pipeline') { pipc = j; break; }
     }
     break;
   }
+  if (hi === -1) throw new Error('BDR header row not found');
 
-  if (headerIdx === -1) throw new Error('BDR header row not found in CSV');
-
-  // 2. Read rep rows — skip blank rows before first data row,
-  //    stop at the first blank row after data has begun (ends BDR block).
   const reps = [];
   let seenData = false;
-  for (let i = headerIdx + 1; i < rows.length; i++) {
+  for (let i = hi + 1; i < rows.length; i++) {
     const r = rows[i];
     if (!r || r.length <= nc) continue;
-
     const name = (r[nc] ?? '').trim();
     if (!name) {
       if (seenData) break; // blank row after data = end of BDR block
@@ -485,61 +612,63 @@ function parseReps(rows) {
     }
     seenData = true;
 
-    const points = parseFloat(r[pc] ?? '') || 0;
-    if (HIDE_ZERO_POINT && points === 0) continue;
+    const pts  = parseFloat(r[pc] ?? '') || 0;
+    if (HIDE_ZERO_POINT && pts === 0) continue;
 
-    const gRaw = (r[gc] ?? '').replace(/[^0-9.]/g, '');
-    const goal  = gRaw ? parseFloat(gRaw) : NaN;
+    const gRaw = (r[gc]  ?? '').replace(/[^0-9.]/g, '');
+    const goal = gRaw ? parseFloat(gRaw) : NaN;
 
     const pRaw = pipc >= 0 ? (r[pipc] ?? '').replace(/[$,\s]/g, '') : '';
-    const pipe  = pRaw ? parseFloat(pRaw) : 0;
+    const pipe = pRaw ? parseFloat(pRaw) : 0;
 
     reps.push({
-      name,
-      points,
+      name, points: pts,
       goal: (isNaN(goal) || goal <= 0) ? DEFAULT_GOAL : goal,
       pipe: isNaN(pipe) ? 0 : pipe,
     });
   }
 
   reps.sort((a, b) => b.points - a.points || b.pipe - a.pipe);
-
-  // VERIFY: inspect parsed data in DevTools console after first load
-  console.table(reps.map(r => ({
-    name: r.name, points: r.points, goal: r.goal, pipeline: r.pipe
-  })));
-
+  console.table(reps.map(r => ({ name: r.name, points: r.points, goal: r.goal, pipeline: r.pipe })));
   return reps;
 }
 
 // ══════════════════════════════════════════════════════════════════
+//  PACE CALCULATION
+// ══════════════════════════════════════════════════════════════════
+function getPaceInfo(points, goal) {
+  const now     = new Date();
+  const dim     = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const frac    = now.getDate() / dim;
+  const expected = +(goal * frac).toFixed(2);
+  const delta   = +(points - expected).toFixed(1);
+  const ratio   = expected > 0 ? points / expected : 1;
+  const status  = ratio >= 0.9 ? 'on-pace' : ratio >= 0.65 ? 'tracking' : 'behind';
+  return { status, delta, expected };
+}
+
+const BADGE_LABEL = { 'on-pace': 'On Pace', tracking: 'Tracking', behind: 'Behind' };
+
+// ══════════════════════════════════════════════════════════════════
 //  HELPERS
 // ══════════════════════════════════════════════════════════════════
-function fmtPipe(n) {
-  if (!n || n === 0) return '—';
-  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M';
-  if (n >= 1_000)     return '$' + Math.round(n / 1_000) + 'K';
-  return '$' + n;
-}
+function fmt(n) { return Number.isInteger(n) ? String(n) : n.toFixed(1); }
 
-function getPhoto(name) {
-  return PHOTO_MAP[name.toLowerCase().trim()] ?? null;
-}
+function getPhoto(name) { return PHOTO_MAP[name.toLowerCase().trim()] ?? null; }
 
 function initials(name) {
-  const parts = name.trim().split(/\s+/);
-  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  return name.slice(0, 2).toUpperCase();
+  const p = name.trim().split(/\s+/);
+  return p.length > 1 ? (p[0][0] + p[p.length-1][0]).toUpperCase() : name.slice(0, 2).toUpperCase();
 }
 
 // ══════════════════════════════════════════════════════════════════
 //  COUNT-UP ANIMATION
 // ══════════════════════════════════════════════════════════════════
-function animateNum(el, from, to, dur = 950) {
+function animateNum(el, from, to, dur = 900) {
   const t0 = performance.now();
   function step(t) {
     const x = Math.min((t - t0) / dur, 1);
-    const e = 1 - Math.pow(1 - x, 3); // ease-out cubic
+    const e = 1 - Math.pow(1 - x, 3);
     el.textContent = (from + (to - from) * e).toFixed(1);
     if (x < 1) requestAnimationFrame(step);
     else el.textContent = to.toFixed(1);
@@ -548,16 +677,15 @@ function animateNum(el, from, to, dur = 950) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-//  DOM BUILDERS
+//  AVATAR
 // ══════════════════════════════════════════════════════════════════
 function makeAvatar(name, size) {
   const url = getPhoto(name);
   if (url) {
     const img = document.createElement('img');
     img.className = 'c-photo';
-    img.src = url;
+    img.src = url; img.alt = name;
     img.style.cssText = `width:${size}px;height:${size}px`;
-    img.alt = name;
     img.onerror = () => img.replaceWith(makeInitialsEl(name, size));
     return img;
   }
@@ -568,162 +696,125 @@ function makeInitialsEl(name, size) {
   const el = document.createElement('div');
   el.className = 'c-initials';
   el.textContent = initials(name);
-  el.style.cssText = `width:${size}px;height:${size}px;font-size:${Math.round(size * 0.34)}px`;
+  el.style.cssText = `width:${size}px;height:${size}px;font-size:${Math.round(size * 0.35)}px`;
   return el;
 }
 
-function makeStat(label, value) {
-  const s = document.createElement('div'); s.className = 'c-stat';
-  const l = document.createElement('div'); l.className = 'c-stat-lbl'; l.textContent = label;
-  const v = document.createElement('div'); v.className = 'c-stat-val'; v.textContent = value;
-  s.append(l, v);
-  return s;
-}
+// ══════════════════════════════════════════════════════════════════
+//  BUILD CARD
+// ══════════════════════════════════════════════════════════════════
+function buildCard(rep, rank) {
+  const pace = getPaceInfo(rep.points, rep.goal);
+  const pct  = Math.round((rep.points / rep.goal) * 100);
 
-function makePointsEl(rep, fontSize) {
-  const el = document.createElement('div');
-  el.className = 'c-points';
-  el.style.fontSize = fontSize;
-  el.dataset.repName = rep.name;
+  const card = document.createElement('div');
+  card.className = 'card';
 
+  // Top: avatar + rank badge
+  const top = document.createElement('div');
+  top.className = 'card-top';
+  top.appendChild(makeAvatar(rep.name, 52));
+  const badge = document.createElement('div');
+  badge.className = 'rank-badge' + (rank <= 3 ? ' top' : '');
+  badge.textContent = '#' + rank;
+  top.appendChild(badge);
+  card.appendChild(top);
+
+  // Name
+  const nameEl = document.createElement('div');
+  nameEl.className = 'c-name';
+  nameEl.textContent = rep.name;
+  card.appendChild(nameEl);
+
+  // Points + "of X pts"
+  const metricEl = document.createElement('div');
+  metricEl.className = 'c-metric';
+  const ptsEl = document.createElement('span');
+  ptsEl.className = 'c-pts';
   const prev = prevPts[rep.name];
   if (prev !== undefined && prev !== rep.points) {
-    // Value changed — animate from previous to current
-    el.textContent = prev.toFixed(1);
-    setTimeout(() => animateNum(el, prev, rep.points), 100);
+    ptsEl.textContent = fmt(prev);
+    setTimeout(() => animateNum(ptsEl, prev, rep.points), 100);
   } else {
-    el.textContent = rep.points.toFixed(1);
+    ptsEl.textContent = fmt(rep.points);
   }
-  return el;
-}
+  const goalEl = document.createElement('span');
+  goalEl.className = 'c-pts-goal';
+  goalEl.textContent = 'of ' + fmt(rep.goal) + ' pts';
+  metricEl.append(ptsEl, goalEl);
+  card.appendChild(metricEl);
 
-function makeProgressBar(rep, height) {
-  const pct = rep.goal > 0 ? Math.min(100, (rep.points / rep.goal) * 100) : 0;
-  const wrap = document.createElement('div'); wrap.className = 'c-progress-wrap';
-  wrap.style.height = height;
-  const fill = document.createElement('div'); fill.className = 'c-progress-fill';
-  fill.style.width = pct + '%';
-  wrap.appendChild(fill);
-  return wrap;
-}
+  // Progress bar
+  const track = document.createElement('div'); track.className = 'c-bar-track';
+  const fill  = document.createElement('div'); fill.className  = 'c-bar-fill';
+  fill.style.width = Math.min(100, pct) + '%';
+  track.appendChild(fill);
+  card.appendChild(track);
 
-function fmtGoal(g) {
-  return Number.isInteger(g) ? String(g) : g.toFixed(1);
-}
+  // Percentage + status badge
+  const bottom = document.createElement('div');
+  bottom.className = 'c-bottom';
+  const pctEl = document.createElement('div');
+  pctEl.className = 'c-pct';
+  pctEl.textContent = pct + '%';
+  const badgeEl = document.createElement('div');
+  badgeEl.className = 'c-badge ' + pace.status;
+  badgeEl.textContent = BADGE_LABEL[pace.status];
+  bottom.append(pctEl, badgeEl);
+  card.appendChild(bottom);
 
-// Build a podium card (rank 1, 2, or 3)
-function buildPCard(rep, rank) {
-  const card = document.createElement('div');
-  card.className = `p-card r${rank}`;
-
-  if (rank === 1) {
-    const crown = document.createElement('div');
-    crown.className = 'crown';
-    crown.textContent = '👑';
-    card.appendChild(crown);
-  }
-
-  const photoSize = rank === 1 ? 84 : 66;
-  card.appendChild(makeAvatar(rep.name, photoSize));
-
-  const name = document.createElement('div');
-  name.className = 'c-name';
-  name.style.cssText = `font-size:${rank === 1 ? '1rem' : '0.875rem'};margin-top:0.25rem`;
-  name.textContent = rep.name;
-  card.appendChild(name);
-
-  const ptsFz = rank === 1
-    ? 'clamp(2.8rem, 3.8vw, 4.4rem)'
-    : 'clamp(2.2rem, 3vw, 3.3rem)';
-  const ptsEl = makePointsEl(rep, ptsFz);
-  ptsEl.style.marginTop = '0.15rem';
-  card.appendChild(ptsEl);
-
-  card.appendChild(makeProgressBar(rep, rank === 1 ? '6px' : '5px'));
-
-  const stats = document.createElement('div'); stats.className = 'c-stats';
-  stats.appendChild(makeStat('Goal', fmtGoal(rep.goal)));
-  stats.appendChild(makeStat('Pipeline', fmtPipe(rep.pipe)));
-  card.appendChild(stats);
+  // Pace delta
+  const deltaEl = document.createElement('div');
+  deltaEl.className = 'c-delta ' + (pace.delta >= 0 ? 'pos' : 'neg');
+  deltaEl.textContent = (pace.delta >= 0 ? '+' : '') + pace.delta.toFixed(1) + ' vs pace';
+  card.appendChild(deltaEl);
 
   return card;
 }
 
-// Build a grid card (rank 4+)
-function buildGCard(rep, rank) {
-  const card = document.createElement('div');
-  card.className = 'g-card';
+// ══════════════════════════════════════════════════════════════════
+//  UPDATE TEAM STATS STRIP
+// ══════════════════════════════════════════════════════════════════
+function updateStats(reps) {
+  const total     = reps.reduce((s, r) => s + r.points, 0);
+  const totalGoal = reps.reduce((s, r) => s + r.goal, 0);
+  const attPct    = totalGoal > 0 ? Math.round((total / totalGoal) * 100) : 0;
 
-  const badge = document.createElement('div');
-  badge.className = 'g-rank';
-  badge.textContent = `#${rank}`;
-  card.appendChild(badge);
+  const now  = new Date();
+  const dim  = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const frac = now.getDate() / dim;
+  const expected = totalGoal * frac;
+  const gap  = +(total - expected).toFixed(1);
 
-  card.appendChild(makeAvatar(rep.name, 50));
+  const onPaceN = reps.filter(r => getPaceInfo(r.points, r.goal).status === 'on-pace').length;
 
-  const name = document.createElement('div');
-  name.className = 'c-name';
-  name.style.fontSize = '0.8rem';
-  name.textContent = rep.name;
-  card.appendChild(name);
+  document.getElementById('sp-current').textContent  = total.toFixed(1);
+  document.getElementById('sp-of-goal').textContent  = 'of ' + fmt(totalGoal) + ' pts';
+  document.getElementById('sp-bar').style.width      = Math.min(100, attPct) + '%';
+  document.getElementById('sp-att').textContent      = attPct + '%';
 
-  const ptsEl = makePointsEl(rep, 'clamp(1.7rem, 2.3vw, 2.5rem)');
-  card.appendChild(ptsEl);
+  const gapEl = document.getElementById('sp-gap');
+  gapEl.textContent = (gap >= 0 ? '+' : '') + gap;
+  gapEl.className   = 'sp-meta-val ' + (gap >= 0 ? 'green' : 'red');
 
-  card.appendChild(makeProgressBar(rep, '4px'));
-
-  const stats = document.createElement('div'); stats.className = 'c-stats';
-  stats.appendChild(makeStat('Pipeline', fmtPipe(rep.pipe)));
-  card.appendChild(stats);
-
-  return card;
+  document.getElementById('sp-onpace').textContent   = onPaceN + ' / ' + reps.length;
 }
 
 // ══════════════════════════════════════════════════════════════════
 //  RENDER
 // ══════════════════════════════════════════════════════════════════
 function render(reps) {
-  const podiumEl  = document.getElementById('podium');
-  const gridEl    = document.getElementById('grid');
-  const loadingEl = document.getElementById('loading-msg');
+  document.getElementById('loading-msg').style.display = 'none';
+  document.getElementById('stats-strip').style.display = 'flex';
+  document.getElementById('grid').style.display        = 'grid';
 
-  loadingEl.style.display = 'none';
-  podiumEl.style.display  = 'flex';
-  gridEl.style.display    = 'grid';
+  document.getElementById('grid').innerHTML = '';
 
-  podiumEl.innerHTML = '';
-  gridEl.innerHTML   = '';
-
-  const topN = Math.min(3, reps.length);
-  const top  = reps.slice(0, topN);
-  const rest = reps.slice(topN);
-
-  // Classic podium arrangement: 2nd | 1st | 3rd
-  const podiumOrder =
-    topN === 1 ? [[top[0], 1]] :
-    topN === 2 ? [[top[1], 2], [top[0], 1]] :
-                 [[top[1], 2], [top[0], 1], [top[2], 3]];
-
-  const rankNames = ['', '1st Place', '2nd Place', '3rd Place'];
-
-  for (const [rep, rank] of podiumOrder) {
-    const slot = document.createElement('div');
-    slot.className = 'p-slot';
-
-    const lbl = document.createElement('div');
-    lbl.className = `p-rank-label r${rank}`;
-    lbl.textContent = rankNames[rank];
-    slot.appendChild(lbl);
-
-    slot.appendChild(buildPCard(rep, rank));
-    podiumEl.appendChild(slot);
+  updateStats(reps);
+  for (let i = 0; i < reps.length; i++) {
+    document.getElementById('grid').appendChild(buildCard(reps[i], i + 1));
   }
 
-  for (let i = 0; i < rest.length; i++) {
-    gridEl.appendChild(buildGCard(rest[i], topN + i + 1));
-  }
-
-  // Snapshot points for next-render diff
   for (const r of reps) prevPts[r.name] = r.points;
 }
 
@@ -740,21 +831,18 @@ function setStatus(type, msg) {
 //  FETCH + REFRESH
 // ══════════════════════════════════════════════════════════════════
 async function refresh() {
-  const url = SHEET_CSV_URL + '&_=' + Date.now();
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(SHEET_CSV_URL + '&_=' + Date.now(), { cache: 'no-store' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const text = await res.text();
-    const reps = parseReps(parseCSV(text));
+    const reps = parseReps(parseCSV(await res.text()));
     lastData = reps;
     render(reps);
     setStatus('fresh', 'Updated ' + new Date().toLocaleTimeString('en-US', {
       hour: 'numeric', minute: '2-digit', second: '2-digit'
     }));
   } catch (err) {
-    console.error('[BDR leaderboard] fetch error:', err);
+    console.error('[BDR]', err);
     if (lastData) {
-      // Keep showing stale data — do not blank the board
       setStatus('stale', 'Stale — last updated ' + new Date().toLocaleTimeString('en-US', {
         hour: 'numeric', minute: '2-digit'
       }));
@@ -762,7 +850,7 @@ async function refresh() {
       setStatus('stale', 'Failed to load');
       const msg = document.getElementById('loading-msg');
       msg.style.display = 'flex';
-      msg.textContent = 'Failed to load data — will retry in 5 minutes…';
+      msg.textContent = 'Failed to load data — will retry…';
     }
   }
 }
