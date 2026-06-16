@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BDR Leaderboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #080e09;
+      --surface:     #0c1a0e;
+      --surface-hi:  #101f12;
+      --border:      #182b1b;
+      --border-hi:   #1e3522;
+      --green:       #00e676;
+      --green-mid:   #00b058;
+      --green-dark:  #006836;
+      --green-glow:  rgba(0, 230, 118, 0.28);
+      --silver:      #8aa4ae;
+      --bronze:      #b07d4a;
+      --text:        #e2efe5;
+      --text-2:      #6e8f75;
+      --text-3:      #384d3c;
+      --font:        'Space Grotesk', system-ui, -apple-system, sans-serif;
+    }
+
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+    }
+
+    body {
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 70% 90% at 12% 55%, rgba(0, 55, 18, 0.14) 0%, transparent 100%),
+        radial-gradient(ellipse 50% 60% at 88% 25%, rgba(0, 35, 12, 0.09) 0%, transparent 100%);
+      color: var(--text);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      padding: 0 2.5rem;
+      height: 4.75rem;
+      flex-shrink: 0;
+      border-bottom: 1px solid var(--border-hi);
+      background: linear-gradient(180deg, rgba(11, 22, 13, 0.98) 0%, rgba(8, 14, 9, 0) 100%);
+      position: relative;
+      z-index: 20;
+    }
+
+    .hdr-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.12rem;
+    }
+
+    .hdr-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    #hdr-period {
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .hdr-brand {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(130deg, #f0f4f1 30%, rgba(0, 230, 118, 0.75) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      user-select: none;
+    }
+
+    .hdr-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.18rem;
+    }
+
+    #clock {
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+    }
+
+    #status {
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.4s;
+    }
+    #status.fresh   { color: var(--green-mid); }
+    #status.stale   { color: #f59e0b; }
+    #status.loading { color: var(--text-3); }
+
+    /* ─── MAIN ───────────────────────────────────────────── */
+    main {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      padding: 1.1rem 2rem 0.9rem;
+      gap: 0.85rem;
+      overflow: hidden;
+    }
+
+    /* ─── LOADING / ERROR ────────────────────────────────── */
+    #loading-msg {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      color: var(--text-3);
+      text-transform: uppercase;
+    }
+
+    /* ─── PODIUM ─────────────────────────────────────────── */
+    #podium {
+      display: none;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .p-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .p-rank-label {
+      font-size: 0.58rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+    .p-rank-label.r1 { color: var(--green); }
+    .p-rank-label.r2 { color: var(--silver); }
+    .p-rank-label.r3 { color: var(--bronze); }
+
+    /* ─── PODIUM CARDS ───────────────────────────────────── */
+    .p-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 20px;
+      border: 1px solid var(--border-hi);
+      background: var(--surface);
+      position: relative;
+    }
+
+    .p-card.r1 {
+      width: 222px;
+      padding: 2rem 1.75rem 1.4rem;
+      border-color: var(--green);
+      background: linear-gradient(155deg, #0b1f0e 0%, #08120a 100%);
+      animation: glow-pulse 3.5s ease-in-out infinite;
+    }
+
+    .p-card.r2 {
+      width: 178px;
+      padding: 1.5rem 1.3rem 1.2rem;
+      border-color: var(--silver);
+    }
+
+    .p-card.r3 {
+      width: 178px;
+      padding: 1.5rem 1.3rem 1.2rem;
+      border-color: var(--bronze);
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% {
+        box-shadow:
+          0 0 28px var(--green-glow),
+          0 0 64px rgba(0, 230, 118, 0.1),
+          inset 0 1px 0 rgba(0, 230, 118, 0.14);
+      }
+      50% {
+        box-shadow:
+          0 0 50px rgba(0, 230, 118, 0.45),
+          0 0 100px rgba(0, 230, 118, 0.18),
+          inset 0 1px 0 rgba(0, 230, 118, 0.24);
+      }
+    }
+
+    .crown {
+      position: absolute;
+      top: -1.45rem;
+      font-size: 1.75rem;
+      filter: drop-shadow(0 2px 10px rgba(255, 215, 0, 0.72));
+      animation: crown-float 4s ease-in-out infinite;
+      line-height: 1;
+      user-select: none;
+    }
+
+    @keyframes crown-float {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50%       { transform: translateY(-4px) rotate(4deg); }
+    }
+
+    /* ─── GRID ───────────────────────────────────────────── */
+    #grid {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 0.65rem;
+      flex: 1;
+      min-height: 0;
+      align-content: start;
+    }
+
+    .g-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.85rem 0.65rem 0.7rem;
+      gap: 0.4rem;
+      position: relative;
+    }
+
+    .g-rank {
+      position: absolute;
+      top: 0.4rem;
+      left: 0.55rem;
+      font-size: 0.52rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-3);
+    }
+
+    /* ─── SHARED CARD ELEMENTS ───────────────────────────── */
+    .c-photo {
+      display: block;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .c-initials {
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      text-transform: uppercase;
+      background: linear-gradient(140deg, var(--green-dark) 0%, #003d1e 100%);
+      flex-shrink: 0;
+    }
+
+    .c-name {
+      font-weight: 600;
+      letter-spacing: 0.025em;
+      color: var(--text);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
+
+    .c-points {
+      font-weight: 800;
+      color: var(--green);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .c-progress-wrap {
+      width: 88%;
+      background: rgba(255, 255, 255, 0.055);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .c-progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--green-dark) 0%, var(--green) 100%);
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 3px;
+    }
+
+    .c-stats {
+      display: flex;
+      gap: 0.9rem;
+      justify-content: center;
+    }
+
+    .c-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.06rem;
+    }
+
+    .c-stat-lbl {
+      font-size: 0.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.11em;
+      color: var(--text-3);
+    }
+
+    .c-stat-val {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-2);
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="hdr-left">
+    <span class="hdr-title">BDR Leaderboard</span>
+    <span id="hdr-period"></span>
+  </div>
+  <div class="hdr-brand">Pump</div>
+  <div class="hdr-right">
+    <div id="clock"></div>
+    <div id="status" class="loading">Loading…</div>
+  </div>
+</header>
+
+<main>
+  <div id="loading-msg">Fetching leaderboard data…</div>
+  <div id="podium"></div>
+  <div id="grid"></div>
+</main>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+//  CONFIG — edit these to reconfigure
+// ══════════════════════════════════════════════════════════════════
+const TITLE_LABEL     = "Q2 2026";
+const REFRESH_MS      = 5 * 60 * 1000;
+const SHEET_CSV_URL   = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQtTd0Lq_yg1_Dhqdownv-Q7y9PJ5d-4oFTYcFYNwUhaAvbU19A67H1Rzv86Sr5yWQxO_C71R1piOaI/pub?gid=1893078768&single=true&output=csv";
+const HIDE_ZERO_POINT = true;
+const DEFAULT_GOAL    = 30;
+const PHOTOS = {
+  "Dalynn":  "photos/dalynn.jpg",
+  "Mike":    "photos/mike.jpg",
+  "Danicka": "photos/danicka.jpg",
+  "Jackson": "photos/jackson.jpg",
+  "Ringo":   "photos/ringo.jpg",
+  "Delaney": "photos/delaney.jpg",
+  "Charles": "photos/charles.jpg",
+  "Jake":    "photos/jake.jpg",
+  "Wyatt":   "photos/wyatt.jpg",
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  INTERNAL STATE
+// ══════════════════════════════════════════════════════════════════
+// Normalize photo keys once at startup for case-insensitive lookup
+const PHOTO_MAP = Object.fromEntries(
+  Object.entries(PHOTOS).map(([k, v]) => [k.toLowerCase().trim(), v])
+);
+
+let lastData = null;  // last successfully parsed rep array
+let prevPts  = {};    // { name -> points } from the previous render, for diff animation
+
+// ══════════════════════════════════════════════════════════════════
+//  CLOCK
+// ══════════════════════════════════════════════════════════════════
+document.getElementById('hdr-period').textContent = TITLE_LABEL;
+
+function tickClock() {
+  document.getElementById('clock').textContent =
+    new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', second: '2-digit' });
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+// ══════════════════════════════════════════════════════════════════
+//  CSV PARSER  — proper RFC-4180, handles "quoted, fields"
+// ══════════════════════════════════════════════════════════════════
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQ = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"') {
+        if (text[i + 1] === '"') { field += '"'; i++; } // escaped quote
+        else inQ = false;
+      } else {
+        field += c;
+      }
+    } else {
+      if      (c === '"')  { inQ = true; }
+      else if (c === ',')  { row.push(field); field = ''; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else if (c !== '\r') { field += c; }
+    }
+  }
+  // flush last field/row
+  if (row.length || field !== '') { row.push(field); rows.push(row); }
+  return rows;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  DATA PARSER  — header-driven, locates BDR block by content
+// ══════════════════════════════════════════════════════════════════
+function parseReps(rows) {
+  let headerIdx = -1, nc = -1, pc = -1, gc = -1, pipc = -1;
+
+  // 1. Find the header row that has a cell exactly "BDR"
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const bi = r.findIndex(c => c.trim() === 'BDR');
+    if (bi === -1) continue;
+
+    headerIdx = i;
+    nc = bi; // name column
+
+    // "Qualified" = points
+    const qi = r.findIndex(c => c.trim() === 'Qualified');
+    pc = qi !== -1 ? qi : bi + 1;
+
+    // "Goal" column (or unlabelled column right after points)
+    const gi = r.findIndex(c => c.trim() === 'Goal');
+    gc = gi !== -1 ? gi : pc + 1;
+
+    // First "Pipeline" after pointsCol
+    for (let j = pc + 1; j < r.length; j++) {
+      if (r[j].trim() === 'Pipeline') { pipc = j; break; }
+    }
+    break;
+  }
+
+  if (headerIdx === -1) throw new Error('BDR header row not found in CSV');
+
+  // 2. Read rep rows until first empty name (end of BDR block)
+  const reps = [];
+  for (let i = headerIdx + 1; i < rows.length; i++) {
+    const r = rows[i];
+    if (!r || r.length <= nc) continue;
+
+    const name = (r[nc] ?? '').trim();
+    if (!name) break; // end of block (blank row before AE section)
+
+    const points = parseFloat(r[pc] ?? '') || 0;
+    if (HIDE_ZERO_POINT && points === 0) continue;
+
+    const gRaw = (r[gc] ?? '').replace(/[^0-9.]/g, '');
+    const goal  = gRaw ? parseFloat(gRaw) : NaN;
+
+    const pRaw = pipc >= 0 ? (r[pipc] ?? '').replace(/[$,\s]/g, '') : '';
+    const pipe  = pRaw ? parseFloat(pRaw) : 0;
+
+    reps.push({
+      name,
+      points,
+      goal: (isNaN(goal) || goal <= 0) ? DEFAULT_GOAL : goal,
+      pipe: isNaN(pipe) ? 0 : pipe,
+    });
+  }
+
+  reps.sort((a, b) => b.points - a.points || b.pipe - a.pipe);
+
+  // VERIFY: inspect parsed data in DevTools console after first load
+  console.table(reps.map(r => ({
+    name: r.name, points: r.points, goal: r.goal, pipeline: r.pipe
+  })));
+
+  return reps;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  HELPERS
+// ══════════════════════════════════════════════════════════════════
+function fmtPipe(n) {
+  if (!n || n === 0) return '—';
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000)     return '$' + Math.round(n / 1_000) + 'K';
+  return '$' + n;
+}
+
+function getPhoto(name) {
+  return PHOTO_MAP[name.toLowerCase().trim()] ?? null;
+}
+
+function initials(name) {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  return name.slice(0, 2).toUpperCase();
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  COUNT-UP ANIMATION
+// ══════════════════════════════════════════════════════════════════
+function animateNum(el, from, to, dur = 950) {
+  const t0 = performance.now();
+  function step(t) {
+    const x = Math.min((t - t0) / dur, 1);
+    const e = 1 - Math.pow(1 - x, 3); // ease-out cubic
+    el.textContent = (from + (to - from) * e).toFixed(1);
+    if (x < 1) requestAnimationFrame(step);
+    else el.textContent = to.toFixed(1);
+  }
+  requestAnimationFrame(step);
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  DOM BUILDERS
+// ══════════════════════════════════════════════════════════════════
+function makeAvatar(name, size) {
+  const url = getPhoto(name);
+  if (url) {
+    const img = document.createElement('img');
+    img.className = 'c-photo';
+    img.src = url;
+    img.style.cssText = `width:${size}px;height:${size}px`;
+    img.alt = name;
+    img.onerror = () => img.replaceWith(makeInitialsEl(name, size));
+    return img;
+  }
+  return makeInitialsEl(name, size);
+}
+
+function makeInitialsEl(name, size) {
+  const el = document.createElement('div');
+  el.className = 'c-initials';
+  el.textContent = initials(name);
+  el.style.cssText = `width:${size}px;height:${size}px;font-size:${Math.round(size * 0.34)}px`;
+  return el;
+}
+
+function makeStat(label, value) {
+  const s = document.createElement('div'); s.className = 'c-stat';
+  const l = document.createElement('div'); l.className = 'c-stat-lbl'; l.textContent = label;
+  const v = document.createElement('div'); v.className = 'c-stat-val'; v.textContent = value;
+  s.append(l, v);
+  return s;
+}
+
+function makePointsEl(rep, fontSize) {
+  const el = document.createElement('div');
+  el.className = 'c-points';
+  el.style.fontSize = fontSize;
+  el.dataset.repName = rep.name;
+
+  const prev = prevPts[rep.name];
+  if (prev !== undefined && prev !== rep.points) {
+    // Value changed — animate from previous to current
+    el.textContent = prev.toFixed(1);
+    setTimeout(() => animateNum(el, prev, rep.points), 100);
+  } else {
+    el.textContent = rep.points.toFixed(1);
+  }
+  return el;
+}
+
+function makeProgressBar(rep, height) {
+  const pct = rep.goal > 0 ? Math.min(100, (rep.points / rep.goal) * 100) : 0;
+  const wrap = document.createElement('div'); wrap.className = 'c-progress-wrap';
+  wrap.style.height = height;
+  const fill = document.createElement('div'); fill.className = 'c-progress-fill';
+  fill.style.width = pct + '%';
+  wrap.appendChild(fill);
+  return wrap;
+}
+
+function fmtGoal(g) {
+  return Number.isInteger(g) ? String(g) : g.toFixed(1);
+}
+
+// Build a podium card (rank 1, 2, or 3)
+function buildPCard(rep, rank) {
+  const card = document.createElement('div');
+  card.className = `p-card r${rank}`;
+
+  if (rank === 1) {
+    const crown = document.createElement('div');
+    crown.className = 'crown';
+    crown.textContent = '👑';
+    card.appendChild(crown);
+  }
+
+  const photoSize = rank === 1 ? 84 : 66;
+  card.appendChild(makeAvatar(rep.name, photoSize));
+
+  const name = document.createElement('div');
+  name.className = 'c-name';
+  name.style.cssText = `font-size:${rank === 1 ? '1rem' : '0.875rem'};margin-top:0.25rem`;
+  name.textContent = rep.name;
+  card.appendChild(name);
+
+  const ptsFz = rank === 1
+    ? 'clamp(2.8rem, 3.8vw, 4.4rem)'
+    : 'clamp(2.2rem, 3vw, 3.3rem)';
+  const ptsEl = makePointsEl(rep, ptsFz);
+  ptsEl.style.marginTop = '0.15rem';
+  card.appendChild(ptsEl);
+
+  card.appendChild(makeProgressBar(rep, rank === 1 ? '6px' : '5px'));
+
+  const stats = document.createElement('div'); stats.className = 'c-stats';
+  stats.appendChild(makeStat('Goal', fmtGoal(rep.goal)));
+  stats.appendChild(makeStat('Pipeline', fmtPipe(rep.pipe)));
+  card.appendChild(stats);
+
+  return card;
+}
+
+// Build a grid card (rank 4+)
+function buildGCard(rep, rank) {
+  const card = document.createElement('div');
+  card.className = 'g-card';
+
+  const badge = document.createElement('div');
+  badge.className = 'g-rank';
+  badge.textContent = `#${rank}`;
+  card.appendChild(badge);
+
+  card.appendChild(makeAvatar(rep.name, 50));
+
+  const name = document.createElement('div');
+  name.className = 'c-name';
+  name.style.fontSize = '0.8rem';
+  name.textContent = rep.name;
+  card.appendChild(name);
+
+  const ptsEl = makePointsEl(rep, 'clamp(1.7rem, 2.3vw, 2.5rem)');
+  card.appendChild(ptsEl);
+
+  card.appendChild(makeProgressBar(rep, '4px'));
+
+  const stats = document.createElement('div'); stats.className = 'c-stats';
+  stats.appendChild(makeStat('Pipeline', fmtPipe(rep.pipe)));
+  card.appendChild(stats);
+
+  return card;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  RENDER
+// ══════════════════════════════════════════════════════════════════
+function render(reps) {
+  const podiumEl  = document.getElementById('podium');
+  const gridEl    = document.getElementById('grid');
+  const loadingEl = document.getElementById('loading-msg');
+
+  loadingEl.style.display = 'none';
+  podiumEl.style.display  = 'flex';
+  gridEl.style.display    = 'grid';
+
+  podiumEl.innerHTML = '';
+  gridEl.innerHTML   = '';
+
+  const topN = Math.min(3, reps.length);
+  const top  = reps.slice(0, topN);
+  const rest = reps.slice(topN);
+
+  // Classic podium arrangement: 2nd | 1st | 3rd
+  const podiumOrder =
+    topN === 1 ? [[top[0], 1]] :
+    topN === 2 ? [[top[1], 2], [top[0], 1]] :
+                 [[top[1], 2], [top[0], 1], [top[2], 3]];
+
+  const rankNames = ['', '1st Place', '2nd Place', '3rd Place'];
+
+  for (const [rep, rank] of podiumOrder) {
+    const slot = document.createElement('div');
+    slot.className = 'p-slot';
+
+    const lbl = document.createElement('div');
+    lbl.className = `p-rank-label r${rank}`;
+    lbl.textContent = rankNames[rank];
+    slot.appendChild(lbl);
+
+    slot.appendChild(buildPCard(rep, rank));
+    podiumEl.appendChild(slot);
+  }
+
+  for (let i = 0; i < rest.length; i++) {
+    gridEl.appendChild(buildGCard(rest[i], topN + i + 1));
+  }
+
+  // Snapshot points for next-render diff
+  for (const r of reps) prevPts[r.name] = r.points;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  STATUS
+// ══════════════════════════════════════════════════════════════════
+function setStatus(type, msg) {
+  const el = document.getElementById('status');
+  el.className = type;
+  el.textContent = msg;
+}
+
+// ══════════════════════════════════════════════════════════════════
+//  FETCH + REFRESH
+// ══════════════════════════════════════════════════════════════════
+async function refresh() {
+  const url = SHEET_CSV_URL + '&_=' + Date.now();
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    const reps = parseReps(parseCSV(text));
+    lastData = reps;
+    render(reps);
+    setStatus('fresh', 'Updated ' + new Date().toLocaleTimeString('en-US', {
+      hour: 'numeric', minute: '2-digit', second: '2-digit'
+    }));
+  } catch (err) {
+    console.error('[BDR leaderboard] fetch error:', err);
+    if (lastData) {
+      // Keep showing stale data — do not blank the board
+      setStatus('stale', 'Stale — last updated ' + new Date().toLocaleTimeString('en-US', {
+        hour: 'numeric', minute: '2-digit'
+      }));
+    } else {
+      setStatus('stale', 'Failed to load');
+      const msg = document.getElementById('loading-msg');
+      msg.style.display = 'flex';
+      msg.textContent = 'Failed to load data — will retry in 5 minutes…';
+    }
+  }
+}
+
+refresh();
+setInterval(refresh, REFRESH_MS);
+</script>
+</body>
+</html>
