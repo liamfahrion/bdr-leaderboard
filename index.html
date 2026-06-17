@@ -443,11 +443,13 @@ const PHOTOS = {
   "Danicka": "photos/danicka.jpg",
   "Jackson": "photos/jackson.jpg",
   "Ringo":   "photos/ringo.jpg",
-  "Delaney": "photos/delaney.jpg",
   "Charles": "photos/charles.jpg",
   "Jake":    "photos/jake.jpg",
   "Wyatt":   "photos/wyatt.jpg",
 };
+
+// Names to exclude from the board entirely (case-insensitive)
+const EXCLUDE = ["Delaney"];
 
 const QUOTES = [
   { text: "It ain't about how hard you hit. It's about how hard you can get hit and keep moving forward.", author: "Rocky Balboa" },
@@ -570,6 +572,7 @@ function parseReps(rows) {
       continue;
     }
     seenData = true;
+    if (EXCLUDE.some(e => e.toLowerCase() === name.toLowerCase())) continue;
 
     const pts  = parseFloat(r[pc] ?? '') || 0;
     if (HIDE_ZERO_POINT && pts === 0) continue;
